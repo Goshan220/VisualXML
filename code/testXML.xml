@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<people>
+	<man>
+		<name> Hans
+			<age>33</age>
+			<data>dataHans</data>
+			lastHansTest
+		</name>
+		<name> Jon
+			<age>13</age>
+			<data>dataJon</data>
+		</name>
+	</man>
+	<women>
+		<name> Alice
+			<age>24</age>
+			<data>dataAlice</data>
+		</name>
+		<name> Grace
+			<age>2</age>
+			<data>dataGrace</data>
+		</name>
+		<name> Mila
+			<age>30</age>
+			<data>dataMila</data>
+		</name>
+	</women>
+</people>

@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
-
+import MyParser
 
 def Quit(ev):
     global root
@@ -10,9 +10,11 @@ def LoadFile(ev):
     fn =  filedialog.Open(root, filetypes=[('*.xml files', '.xml')]).show()
     if fn == '':
         return
-    textbox.delete('1.0', 'end')
-    textbox.insert('1.0', open(fn, 'rt').read())
+    text = open(fn)
+    MyParser.start(text)
 
+    textbox.delete('1.0', 'end')
+    textbox.insert('1.0', open("~temp.txt", 'rt').read())
 
 def SaveFile(ev):
     fn =  filedialog.SaveAs(root, filetypes=[('*.txt files', '.txt')]).show()
