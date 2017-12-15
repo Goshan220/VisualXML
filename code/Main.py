@@ -2,9 +2,17 @@ from tkinter import *
 from tkinter import filedialog
 import MyParser
 
-def Quit(ev):
-    global root
-    root.destroy()
+#TODO: написать хелпу
+test = []
+def Help(ev):
+    test1(test)
+    # global root
+    # root.quit()
+
+def test1(test):
+    listbox_item = ["ein", "zwei", "drei", "3", "1", "20", "34", "53", "777", "666"]
+    for item in listbox_item:
+        listbox.insert(END, item)
 
 def LoadFile(ev):
     fn =  filedialog.Open(root, filetypes=[('*.xml files', '.xml')]).show()
@@ -28,14 +36,18 @@ def SaveFile(ev):
 
 root = Tk()
 root.title("VisualXML")
-panelFrame = Frame(root, height=60, bg='gray')
-textFrame = Frame(root, height=340, width=600)
+root.geometry("550x500")
+root.wm_minsize(540, 300)
+
+panelFrame = Frame(root, bg='gray', height = 100)
+textFrame = Frame(root)
 
 panelFrame.pack(side='top', fill='x')
-textFrame.pack(side='bottom', fill='both', expand=1)
+textFrame.pack(side='bottom', fill = 'both' , expand=1)
 
-textbox = Text(textFrame, font='Fristyle 14', wrap='word')
+textbox = Text(textFrame, font='Fristyle 8', wrap='word')
 scrollbar = Scrollbar(textFrame)
+# scrollbar = Scrollbar(panelFrame)
 
 scrollbar['command'] = textbox.yview
 textbox['yscrollcommand'] = scrollbar.set
@@ -45,14 +57,32 @@ scrollbar.pack(side='right', fill='y')
 
 loadBtn = Button(panelFrame, text='Load XML File')
 # saveBtn = Button(panelFrame, text='Save')
-quitBtn = Button(panelFrame, text='Quit')
+quitBtn = Button(panelFrame, text='Help')
+#===========
+#===========
+
+
+listbox_item = test
+def select_item(event):
+    value = (listbox.get(listbox.curselection()))
+    print(value)
+listbox = Listbox(panelFrame, width = 30, height = 4, font = ('times', 13))
+listbox.bind('<<ListboxSelect>>', select_item)
+
+for item in listbox_item:
+    listbox.insert(END, item)
+listbox.place(x = 230, y = 10)
+#===========
+#===========
 
 loadBtn.bind("<Button-1>", LoadFile)
 # saveBtn.bind("<Button-1>", SaveFile)
-quitBtn.bind("<Button-1>", Quit)
+quitBtn.bind("<Button-1>", Help)
 
-loadBtn.place(x=10, y=10, width=100, height=40)
+loadBtn.place(x = 10,  y = 10, width = 100, height = 35)
+quitBtn.place(x = 120, y = 10, width = 100, height = 35)
 # saveBtn.place(x=110, y=10, width=40, height=40)
-quitBtn.place(x=120, y=10, width=100, height=40)
+root.rowconfigure(0, weight=1)
+root.columnconfigure(0, weight=1)
 
 root.mainloop()

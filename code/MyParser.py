@@ -24,18 +24,18 @@ def recurs(root, tab, file):
 
         if (child.attrib != {}) | (child.text != None):
             if child.attrib != {}:
-                if (str(child.tag) in tagDict):
+                if str(child.tag) in tagDict:
                     temp = str(tagDict.get(str(child.tag)))
                     temp = temp + " ::: " + str(child.attrib)
-                    tagDict.update({str(child.tag):temp})
+                    tagDict.update({str(child.tag): temp})
                 else:
-                    tagDict.update({str(child.tag):child.attrib})
+                    tagDict.update({str(child.tag): child.attrib})
 
             # print(child.tag + " attrib -> " + str(child.attrib)) #console log: DEBUG
             if child.text == None:
-                s = str(tab)+": " + indent + str(child.tag) + ": " + str(child.attrib) + "\n"
+                s = str(tab) + ": " + indent + str(child.tag) + ": " + str(child.attrib) + "\n"
             else:
-                if (re.search(r'[\!-\~]', str(child.text))):
+                if re.search(r'[\!-\~]', str(child.text)):
                     s = str(tab) + ": " + indent + str(child.tag) + ": " + str(child.attrib) \
                         + ": " + str(child.text) + "\n"
                 else:
