@@ -1,62 +1,49 @@
+import lxml.etree as etree
 import re
 
-class Tree(object):
-    def __init__(self, name='root', children=None):
-        self.name = name
-        self.children = []
-        if children is not None:
-            for child in children:
-                self.add_child(child)
 
-    def __repr__(self):
-        return self.name
+class Pars():
+    def __init__(self):
+        self.tab = 1
+        self.tagDict = {}
 
-    def add_child(self, node):
-        assert isinstance(node, Tree)
-        self.children.append(node)
+    def start(self, text):
+        tree = etree.parse(text)
+        root = tree.getroot()
+        file = open("~temp.txt", 'w')
+        file.write("0: " + str(root.tag) + ": " + str(root.attrib) + str(root.text))
+        self.recurs(root, self.tab, file)
+        file.close()
+        for tag in self.tagDict.keys():
+            print(tag + " :==: " + str(self.tagDict.get(tag)))
+        return 0
 
-    def show(self):
-        print(self.name)
-        if self.children is not None:
-            for i in self.children:
-                i.show()
-            else:
-                print("DEBUG| last")
+    def recurs(self, root, tab, file):
+        for child in root:
+            indent = " " * tab * 4
 
-    def select(self, name):
-        if self.name == name:
-            return self
-        else:
-            if self.children is not None:
-                for i in self.children:
-                    print(i.name)
-                    i.select(name)
+            if (child.attrib != {}) | (child.text != None):
+                if child.attrib != {}:
+                    if str(child.tag) in self.tagDict:
+                        temp = str(self.tagDict.get(str(child.tag)))
+                        temp = temp + " ::: " + str(child.attrib)
+                        self.tagDict.update({str(child.tag): temp})
+                    else:
+                        self.tagDict.update({str(child.tag): child.attrib})
 
-# <[^\/].*[^\/]> - только открываюшие теги
-# <[^\/].*\/> - только самозакрывающиеся теги
-# <\/.*> - только закрывающие теги
-
-def text_analyze(text):
-    openTags = re.findall(r'(<[^\/].*[^\/]>)|(<[^\/].*\/>)|(<\/.*>)', text)
-    # closerTags = re.findall(r'<\/.*>', text)
-    # oneTags = re.findall(r'<[^\/].*\/>', text)
-    print(openTags)
-    # print(closerTags)
-    # print(oneTags)
-    return 0
-# t = Tree('*',
-#          [Tree('1'), Tree('2'), Tree('+',
-#             [Tree('3'), Tree('4')])])
-#
-# r = Tree("ROOT", None)
-# print(r)
-# print(r.children)
-# r.add_child(Tree("rereq", None))
-# r.add_child( Tree("speed", None))
-# print(r.children)
-# r.children[0].add_child(Tree("Fucl", None))
-# r.show()
-# t.add_child(Tree("DDD", None))
-# t.add_child(Tree("sqrt", None))
-# t.show()
-# print('test')
+                # print(child.tag + " attrib -> " + str(child.attrib)) #console log: DEBUG
+                if child.text == None:
+                    s = str(tab) + ": " + indent + str(child.tag) + ": " + str(child.attrib) + "\n"
+                else:
+                    if re.search(r'[\!-\~]', str(child.text)):
+                        s = str(tab) + ": " + indent + str(child.tag) + ": " + str(child.attrib) \
+                            + ": " + str(child.text) + "\n"
+                    else:
+                        s = str(tab) + ": " + indent + str(child.tag) + ": " + str(child.attrib) + "\n"
+                s = re.sub(r'\n\s{2}', '', s)
+                file.write(s)
+            tab += self.tab
+            root = child
+            self.recurs(root, tab, file)
+            tab -= self.tab
+        return 0
